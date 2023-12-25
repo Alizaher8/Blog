@@ -1,48 +1,78 @@
 <template>
-        <div class="createPost">
-            <div style="
+    <div class="createPost">
+        <div
+            style="
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-            ">
-                <h3 class="mini-heading" style="margin: 0">Create Post</h3>
-                <a href="#" @click="addPost" style="
+            "
+        >
+            <h3 class="mini-heading" style="margin: 0">Create Post</h3>
+            <a
+                href="#"
+                @click="addPost"
+                style="
                     background: #ebfffe;
                     padding: 10px 20px 15px 20px;
                     display: flex;
                     align-items: center;
                     text-decoration: none;
-                ">
-                    <i style="
+                "
+            >
+                <i
+                    style="
                         background: #00ff00;
                         color: #fff;
                         padding: 5px;
                         border-radius: 50%;
                         margin-right: 10px;
-                    " class="fa-solid fa-plus"></i>
-                    Add Post
+                    "
+                    class="fa-solid fa-plus"
+                ></i>
+                Add Post
+            </a>
+        </div>
+        <div class="post-text">
+            <img :src="'/uploads/users/'+ userImage" alt="User Image" />
+
+            <input
+                type="textarea"
+                v-model="postContent"
+                placeholder="What's on your mind, zahidul"
+            />
+        </div>
+        <div class="post-icon">
+            <div class="post-media">
+                <input
+                    type="file"
+                    ref="photoInput"
+                    style="display: none"
+                    @change="handleFileUpload('photo', $event)"
+                />
+                <a
+                    href="#"
+                    style="background: #ffebed"
+                    @click="openFileInput('photo')"
+                >
+                    <i
+                        style="background: #ff4154"
+                        class="fa-solid fa-camera"
+                    ></i>
+                    Gallery
                 </a>
-            </div>
-            <div class="post-text">
-                <img src="images/user.jpg" alt="user" />
-                <input type="textarea" v-model="postContent" placeholder="What's on your mind, zahidul" />
-            </div>
-            <div class="post-icon">
-                <div class="post-media">
-                    <input type="file" ref="photoInput" style="display: none" @change="handleFileUpload('photo', $event)" />
-                    <a href="#" style="background: #ffebed" @click="openFileInput('photo')">
-                        <i style="background: #ff4154" class="fa-solid fa-camera"></i>
-                        Gallery
-                    </a>
-                    <div class="photo-container">
-                        <div v-for="(photo, index) in selectedPhotos" :key="index" class="photo-frame">
-                            <img :src="photo" alt="Selected photo" />
-                            <button @click="removePhoto(index)">Remove</button>
-                        </div>
+                <div class="photo-container">
+                    <div
+                        v-for="(photo, index) in selectedPhotos"
+                        :key="index"
+                        class="photo-frame"
+                    >
+                        <img :src="photo" alt="Selected photo" />
+                        <button @click="removePhoto(index)">Remove</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </template>
 
 <script>
@@ -51,12 +81,20 @@ import axios from "axios";
 export default {
     data() {
         return {
-            postContent: "", // Initialize the data property to an empty string
+            postContent: " ", // Initialize the data property to an empty string
             selectedPhotos: [],
+            userImage:""
         };
-
     },
+    created() {
+    this.getUserImage();
+  },
     methods: {
+        async getUserImage(){
+            const response = await axios.get('/api/user-image');
+            console.log(response.data);
+            this.userImage = response.data.image;
+        },
         openFileInput(type) {
             if (type === "photo") {
                 this.$refs.photoInput.click();
@@ -66,7 +104,7 @@ export default {
         },
         async handleFileUpload(type, event) {
             const file = event.target.files[0];
-           // console.log(file);
+            // console.log(file);
             if (type === "photo") {
                 // Handle photo upload
                 const reader = new FileReader();
@@ -79,7 +117,7 @@ export default {
                 reader.readAsDataURL(file);
                 const result = await promise;
                 this.selectedPhotos.push(result);
-               // console.log(result);
+                // console.log(result);
             }
         },
 
@@ -88,41 +126,41 @@ export default {
         },
 
         addPost() {
-  // Create a new FormData object
-  const formData = new FormData();
+            // Create a new FormData object
+            const formData = new FormData();
 
-  // Append the post content to the FormData object
-  formData.append("content", this.postContent);
+            // Append the post content to the FormData object
+            formData.append("content", this.postContent);
 
+            // Append any selected photos to the FormData object
+            if (this.selectedPhotos.length > 0) {
+                this.selectedPhotos.forEach((photo) => {
+                    const blob = this.dataURItoBlob(photo);
+                    formData.append("photos[]", blob); // Use 'photos[]' to handle multiple photos
+                    // Retrieve the data associated with the 'photos[]' key
+                    const appendedBlob = formData.get("photos[]");
+                });
+            }
+            // Send the FormData object to the backend using Axios
+            axios
+                .post("/api/posts", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((response) => {
+                    // Handle the response
+                    // console.log(response);
+                })
+                .catch((error) => {
+                    // Handle any errors
+                    console.error("Error adding post:", error);
+                });
 
-  // Append any selected photos to the FormData object
-  if(this.selectedPhotos.length > 0){
-  this.selectedPhotos.forEach((photo) => {
-    const blob = this.dataURItoBlob(photo);
-    formData.append('photos[]', blob); // Use 'photos[]' to handle multiple photos
-    // Retrieve the data associated with the 'photos[]' key
-    const appendedBlob = formData.get('photos[]');
-     });
-    }
-  // Send the FormData object to the backend using Axios
-  axios.post('/api/posts', formData, {
-  headers: {
-    'Content-Type': 'multipart/form-data'
-  }
-})
-    .then((response) => {
-      // Handle the response
-      // console.log(response);
-    })
-    .catch((error) => {
-      // Handle any errors
-      console.error("Error adding post:", error);
-    });
-
-  // Reset the postContent and selectedPhotos data properties
-  this.postContent = "";
-  this.selectedPhotos = [];
-},
+            // Reset the postContent and selectedPhotos data properties
+            this.postContent = "";
+            this.selectedPhotos = [];
+        },
 
         dataURItoBlob(dataURI) {
             const byteString = atob(dataURI.split(",")[1]);

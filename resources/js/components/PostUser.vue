@@ -19,21 +19,15 @@
                     </ul>
                     <p>
                        {{post.content}}
-                        <a
-                            href="https://www.youtube.com/channel/UCHhGX-DD7A8jq7J_NPGN6gA">https://www.youtube.com/channel/UCHhGX-DD7A8jq7J_NPGN6gA</a>
-                    </p>
+                                </p>
                 </div>
 
-                <div class="post-images">
-                    <div class="post-images1">
-                        <img :src="'/storage/photos/'+ post.photo" alt="Image">
-                         <img src="images/pp2.jpg" alt="post images 02" />
-                        <img src="images/pp3.jpg" alt="post images 03" />
-                    </div>
-                    <div class="post-images2">
-                        <img src="images/pp4.jpg" alt="post images 04" />
-                    </div>
-                </div>
+                <div  v-if="post.photo">
+                            <div class="image-container"  v-for="(photo, index) in JSON.parse(post.photo)" :key="index">
+                                    <img :src="'/storage/photos/' + photo" alt="Image" class="post-image">
+                            </div>
+                            </div>
+
 
                 <div class="like-comment">
                     <ul>
@@ -192,49 +186,16 @@ export default {
     color: #4575b3;
 }
 
-.post-images {
-    display: flex;
-    justify-content: space-between;
+.image-container {
+    width: 100%; /* Set the width to match the parent container */
+    height: auto; /* Allow the height to adjust based on the aspect ratio of the image */
+    overflow: hidden; /* Hide any part of the image that exceeds the container */
 }
 
-.post-images1 {
-    width: 60%;
-    overflow: hidden;
-}
-
-.post-images2 {
-    width: 37%;
-    overflow: hidden;
-}
-
-.post-images1 img:nth-child(1) {
-    width: 100%;
-    margin-bottom: 10px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 15px;
-}
-
-.post-images1 img:nth-child(2) {
-    width: 47%;
-    margin-right: 4%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 15px;
-}
-
-.post-images1 img:nth-child(3) {
-    width: 47%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 15px;
-}
-
-.post-images2 img {
-    width: 100%;
-    height: 335px;
-    border-radius: 15px;
-    object-fit: cover;
+.post-image {
+    width: 100%; /* Set the width to match the parent container */
+    height: 100%; /* Set the height to match the parent container */
+    object-fit: contain; /* Display the entire image within the dimensions, maintaining aspect ratio */
 }
 
 .like-comment {

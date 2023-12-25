@@ -39,16 +39,19 @@ class PostController extends Controller
         foreach ($photos as $photo) {
             // Process and store each photo
             $path = $photo->store('photos', 'public');
+
             // You can then save the $path to the database or perform any other required operations
              // Get the photo name from the path
             $photo_name = basename($path);
+            $uploadedImagePaths[] = $photo_name;
+
 
         }
     }
     else{
         $photo_name=null;
     }
-
+    $jsonImagePaths = json_encode($uploadedImagePaths);
         $user = Auth::user();
         // $validator = Validator::make($request->all(), [
         //     // 'title' => 'required',
@@ -61,9 +64,9 @@ class PostController extends Controller
 
         $post = Post::create([
             //  'title' => $request->input('title'),
-            'content' => null,
+            'content' => $request->content,
             'user_id' => $user->id,
-            'photo'=>$photo_name
+            'photo'=>$jsonImagePaths
 
         ]);
         Notify::create([

@@ -25,25 +25,24 @@ use App\Models\Post;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post("push-subscribe",function(Request $request){
-  PushSubscription::create([
-    'data'=>$request->getContent()
-  ]);
-
+Route::post("push-subscribe", function (Request $request) {
+    PushSubscription::create([
+        'data' => $request->getContent()
+    ]);
 });
 
-Route::get("/notify", function (){
-   // $usernames = Notify::with('user')->get()->pluck('user.username');
+Route::get("/notify", function () {
+    // $usernames = Notify::with('user')->get()->pluck('user.username');
     $info = Notify::join('users', 'notifies.user_id', '=', 'users.id')
-    ->select('users.email')
-    ->get();
-     return  response()->json($info);
+        ->select('users.email')
+        ->get();
+    return  response()->json($info);
 });
-Route::get("/userposts", function (){
+Route::get("/userposts", function () {
     $info = Post::join('users', 'posts.user_id', '=', 'users.id')
-     ->select('users.firstname','users.lastname','users.image','posts.content','posts.created_at','posts.photo')
-     ->get()
-     ->toArray();
+        ->select('users.firstname', 'users.lastname', 'users.image', 'posts.content', 'posts.created_at', 'posts.photo')
+        ->get()
+        ->toArray();
     //  $info->transform(function ($item) {
     //     // Update the existing `created_at` attribute with the human-readable format
     //     $item->created_at_human = $item->created_at->diffForHumans();
@@ -55,8 +54,14 @@ Route::get("/userposts", function (){
 
         return $item;
     }, $info);
-     return  response()->json($info);
-    });
+    return  response()->json($info);
+});
 
 
-Route::post('/posts',[PostController::class,'addPost']);
+Route::post('/posts', [PostController::class, 'addPost']);
+//get user image to use in any component 
+Route::get('/user-image', function () {
+    $user = Auth::user();
+    $imageUrl = $user ? $user->image : 'default-image.jpg';
+    return response()->json(['image' => $imageUrl]);
+});
