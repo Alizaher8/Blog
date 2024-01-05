@@ -53,6 +53,7 @@ class PostsUser implements ShouldBroadcast
            'image'=> $this->user->image,
            'content'=>$this->post->content,
            'photo'=>$this->post->photo,
+           'id'=>$this->post->id,
            'created_at'=>$this->post->created_at->diffForhumans(),
         ];
     }

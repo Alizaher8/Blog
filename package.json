@@ -28,6 +28,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.4.2",
+        "bootstrap-icons": "^1.11.2",
         "npm-watch": "^0.11.0"
     }
 }

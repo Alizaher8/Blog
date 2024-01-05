@@ -10,31 +10,29 @@
             </div>
             <div class="fb-p1-main">
                 <div class="post-title">
-                    <img :src="'/uploads/users/' + post.image" alt="Image">
+                    <img :src="'/uploads/users/' + post.user.image" alt="Image">
                     <ul>
                         <li>
-                            <h3> {{ post.firstname }} {{ post.lastname }}<span> </span></h3>
+                            <h3> {{ post.user.firstname }} {{ post.user.lastname }}<span> </span></h3>
                         </li>
                         <li><span>{{ post.created_at }}</span></li>
                     </ul>
                     <p>
-                       {{post.content}}
-                                </p>
+                        {{ post.content }}
+                    </p>
                 </div>
 
-                <div  v-if="post.photo">
-                            <div class="image-container"  v-for="(photo, index) in JSON.parse(post.photo)" :key="index">
-                                    <img :src="'/storage/photos/' + photo" alt="Image" class="post-image">
-                            </div>
-                            </div>
-
+                <div v-if="post.photo" class="image-container"
+                    :class="{ 'single-image': JSON.parse(post.photo).length === 1 }">
+                    <div v-for="(photo, index) in JSON.parse(post.photo)" :key="index" class="image-wrapper">
+                        <img :src="'/storage/photos/' + photo" alt="Image" class="post-image">
+                    </div>
+                </div>
 
                 <div class="like-comment">
                     <ul>
                         <li>
-                            <img src="images/love.png" alt="love" />
-                            <img src="images/like.png" alt="like" />
-                            <span>22k like</span>
+                           <like-post :post_id="post.id" :like_id="post.likes.id"></like-post>
                         </li>
                         <li>
                             <i class="fa-regular fa-comment-dots"></i>
@@ -53,36 +51,44 @@
 </template>
 
 <script>
+import LikePost from '../components/LikePost.vue';
+
 export default {
     data() {
         return {
             databasePosts: [],
             realTimePosts: [],
-            allPosts:[],
-            formattedDate: null
+            allPosts: [],
+            formattedDate: null,
+
         };
+    },
+    components :{
+        LikePost,
+
     },
     watch: {
         realTimePosts: {
-      handler: function(newPosts) {
-        // When real-time Posts change, update the allPosts array
-        this.$nextTick(() => {
-          this.updateAllPosts();
-        });
-      },
-      deep: true
-    }
+            handler: function (newPosts) {
+                // When real-time Posts change, update the allPosts array
+                this.$nextTick(() => {
+                    this.updateAllPosts();
+                });
+            },
+            deep: true
+        }
 
     },
     methods: {
 
         updateAllPosts() {
-      // Update the allPosts array when real-time posts change
-      this.allPosts = [...this.databasePosts];
-      if (Array.isArray(this.realTimePosts)) {
-        this.allPosts = [...this.allPosts, ...this.realTimePosts];
-      }
-    },
+            // Update the allPosts array when real-time posts change
+            this.allPosts = [...this.databasePosts];
+            if (Array.isArray(this.realTimePosts)) {
+                this.allPosts = [...this.allPosts, ...this.realTimePosts];
+            }
+        },
+
 
     },
     mounted() {
@@ -98,7 +104,7 @@ export default {
     },
     computed: {
         allPosts() {
-            this.allPosts= [...this.databasePosts, ...this.realTimePosts];
+            this.allPosts = [...this.databasePosts, ...this.realTimePosts];
             return this.allPosts;
         },
     },
@@ -186,17 +192,34 @@ export default {
     color: #4575b3;
 }
 
+
 .image-container {
-    width: 100%; /* Set the width to match the parent container */
-    height: auto; /* Allow the height to adjust based on the aspect ratio of the image */
-    overflow: hidden; /* Hide any part of the image that exceeds the container */
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-auto-rows: minmax(200px, auto);
+    gap: 10px;
 }
 
 .post-image {
-    width: 100%; /* Set the width to match the parent container */
-    height: 100%; /* Set the height to match the parent container */
-    object-fit: contain; /* Display the entire image within the dimensions, maintaining aspect ratio */
+    width: 100%;
+    /* Set the width to match the parent container */
+    height: 100%;
+    /* Set the height to match the parent container */
+    object-fit: cover;
+    /* Display the entire image within the dimensions, maintaining aspect ratio */
+
 }
+
+.image-wrapper {
+    /* Adjust as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
 
 .like-comment {
     width: 100%;

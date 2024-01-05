@@ -20,7 +20,8 @@ const app = createApp({
 components:{
     ExampleComponent,
     PostUser,
-    CreatePost
+    CreatePost,
+  
 }
 });
 import PostUser from './components/PostUser.vue';
@@ -29,6 +30,8 @@ import ExampleComponent from './components/ExampleComponent.vue';
 app.component('example-component', ExampleComponent);
 app.component('post-user',PostUser);
 app.component('create-post',CreatePost);
+
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

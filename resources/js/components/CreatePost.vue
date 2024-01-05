@@ -1,71 +1,42 @@
 <template>
     <div class="createPost">
-        <div
-            style="
+        <div style="
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-            "
-        >
+            ">
             <h3 class="mini-heading" style="margin: 0">Create Post</h3>
-            <a
-                href="#"
-                @click="addPost"
-                style="
+            <a href="#" @click="addPost" style="
                     background: #ebfffe;
                     padding: 10px 20px 15px 20px;
                     display: flex;
                     align-items: center;
                     text-decoration: none;
-                "
-            >
-                <i
-                    style="
+                ">
+                <i style="
                         background: #00ff00;
                         color: #fff;
                         padding: 5px;
                         border-radius: 50%;
                         margin-right: 10px;
-                    "
-                    class="fa-solid fa-plus"
-                ></i>
+                    " class="fa-solid fa-plus"></i>
                 Add Post
             </a>
         </div>
         <div class="post-text">
-            <img :src="'/uploads/users/'+ userImage" alt="User Image" />
+            <img :src="'/uploads/users/' + userImage" alt="User Image" />
 
-            <input
-                type="textarea"
-                v-model="postContent"
-                placeholder="What's on your mind, zahidul"
-            />
+            <input type="textarea" v-model="postContent" placeholder="What's on your mind, zahidul" />
         </div>
         <div class="post-icon">
             <div class="post-media">
-                <input
-                    type="file"
-                    ref="photoInput"
-                    style="display: none"
-                    @change="handleFileUpload('photo', $event)"
-                />
-                <a
-                    href="#"
-                    style="background: #ffebed"
-                    @click="openFileInput('photo')"
-                >
-                    <i
-                        style="background: #ff4154"
-                        class="fa-solid fa-camera"
-                    ></i>
+                <input type="file" ref="photoInput" style="display: none" @change="handleFileUpload('photo', $event)" />
+                <a href="#" style="background: #ffebed" @click="openFileInput('photo')">
+                    <i style="background: #ff4154" class="fa-solid fa-camera"></i>
                     Gallery
                 </a>
                 <div class="photo-container">
-                    <div
-                        v-for="(photo, index) in selectedPhotos"
-                        :key="index"
-                        class="photo-frame"
-                    >
+                    <div v-for="(photo, index) in selectedPhotos" :key="index" class="photo-frame">
                         <img :src="photo" alt="Selected photo" />
                         <button @click="removePhoto(index)">Remove</button>
                     </div>
@@ -83,14 +54,14 @@ export default {
         return {
             postContent: " ", // Initialize the data property to an empty string
             selectedPhotos: [],
-            userImage:""
+            userImage: ""
         };
     },
     created() {
-    this.getUserImage();
-  },
+        this.getUserImage();
+    },
     methods: {
-        async getUserImage(){
+        async getUserImage() {
             const response = await axios.get('/api/user-image');
             console.log(response.data);
             this.userImage = response.data.image;
