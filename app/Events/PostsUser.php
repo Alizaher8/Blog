@@ -48,13 +48,22 @@ class PostsUser implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-           'firstname'=> $this->user->firstname,
-           'lastname'=>$this->user->lastname,
-           'image'=> $this->user->image,
-           'content'=>$this->post->content,
-           'photo'=>$this->post->photo,
-           'id'=>$this->post->id,
-           'created_at'=>$this->post->created_at->diffForhumans(),
-        ];
+
+
+                'content'=>$this->post->content,
+                'photo'=>$this->post->photo,
+                'id'=>$this->post->id,
+                'created_at'=>$this->post->created_at->diffForhumans(),
+                'user'=>[
+                 'firstname'=> $this->user->firstname,
+                 'lastname'=>$this->user->lastname,
+                 'image'=> $this->user->image,
+                ],
+                'likes'=>[]
+
+            ];
+
+
+
     }
 }

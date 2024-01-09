@@ -11,9 +11,14 @@
             <div class="fb-p1-main">
                 <div class="post-title">
                     <img :src="'/uploads/users/' + post.user.image" alt="Image">
+
+
                     <ul>
                         <li>
-                            <h3> {{ post.user.firstname }} {{ post.user.lastname }}<span> </span></h3>
+                            <h3> {{ post.user.firstname }}
+                                {{ post.user.lastname }}
+                                <span> </span>
+                            </h3>
                         </li>
                         <li><span>{{ post.created_at }}</span></li>
                     </ul>
@@ -32,7 +37,8 @@
                 <div class="like-comment">
                     <ul>
                         <li>
-                           <like-post :post_id="post.id" :like_id="post.likes.id"></like-post>
+                            
+                            <like-post :post_id="post.id" :likes="post.likes"></like-post>
                         </li>
                         <li>
                             <i class="fa-regular fa-comment-dots"></i>
@@ -59,11 +65,12 @@ export default {
             databasePosts: [],
             realTimePosts: [],
             allPosts: [],
+
             formattedDate: null,
 
         };
     },
-    components :{
+    components: {
         LikePost,
 
     },
@@ -94,7 +101,10 @@ export default {
     mounted() {
         axios.get("/api/userposts").then((response) => {
             this.databasePosts = response.data;
-            console.log(response.data);
+            console.log(response);
+
+
+
         });
 
         Echo.channel("PostsUsers").listen("PostsUser", (e) => {
@@ -103,6 +113,7 @@ export default {
         });
     },
     computed: {
+
         allPosts() {
             this.allPosts = [...this.databasePosts, ...this.realTimePosts];
             return this.allPosts;
@@ -247,4 +258,5 @@ export default {
     color: #6e6e6e;
     margin-left: 10px;
     font-size: 14px;
-}</style>
+}
+</style>

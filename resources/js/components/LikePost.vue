@@ -20,18 +20,28 @@ export default {
     },
     props:{
       post_id : Number,
-      like_id : Number
+      likes: {
+      type: Array,
+      required: true
+    }
     },
     mounted()
     {
+        const originalArray = proxyArray[[this.likes]]; // Access the original array
 
+      console.log(originalArray)
     },
     methods: {
         chooseLike() {
 
-               if(this.like===''|| (like_id !== null && like_id !== undefined) ){this.like=1;
-                this.addLike();}
-               else{this.like='';
+               if(this.like==='' )
+               {
+                this.like=1;
+                this.addLike();
+            }
+               else
+               {
+               this.like='';
                this.addLike();
             }
 
@@ -57,7 +67,8 @@ export default {
                     console.error("Error adding post:", error);
                 });
 
-        } else{
+         }
+        else{
             console.log(this.post_id);
             axios
                 .post("/api/likes", formData,)
@@ -69,8 +80,6 @@ export default {
                     // Handle any errors
                     console.error("Error adding post:", error);
                 });
-
-
 
         }
     }

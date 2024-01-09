@@ -49,36 +49,14 @@ Route::get("/userposts", function () {
        $q->select('id','firstname','lastname','image');
     },'likes'])->get()->toArray();
 
-// $info =[];
-//  foreach ($posts as $post) {
-//     $postItem = [  'firstname' =>$post->user->firstname,
-//                'lastname' =>$post->user->lastname,
-//                'image' =>$post->user->image,
-//                'content' =>$post->content,
-//                'created_at' =>$post->created_at,
-//                'photo' =>$post->photo,
-//                'id' =>$post->id,
-
-
-//     ];
-//  }
-//  $info[]= $postItem;
-    // $info = Post::join('users', 'posts.user_id', '=', 'users.id')
-    //     ->select('users.firstname', 'users.lastname', 'users.image', 'posts.content', 'posts.created_at', 'posts.photo','posts.id')
-    //     ->get()
-    //     ->toArray();
- // dd($posts);
-    //  $posts->transform(function ($item) {
-    //     // Update the existing `created_at` attribute with the human-readable format
-    //     $item->created_at_human = $item->created_at->diffForHumans();
-    //           return $item;
-    // });
     $posts = array_map(function ($item) {
         // Update the value of the `created_at` attribute with the human-readable format
         $item['created_at'] = Carbon::parse($item['created_at'])->diffForHumans();
 
         return $item;
     }, $posts);
+
+
    return  response()->json($posts);
  });
 

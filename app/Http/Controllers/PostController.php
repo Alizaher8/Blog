@@ -6,6 +6,8 @@ use App\Models\Notify;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Like;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -76,6 +78,7 @@ class PostController extends Controller
             'post_id'=>$post->id,
             'comment_id'=>null,
         ]);
+
 
         event(new PostsUser($post,$user));
         event(new UserRegister($user));
