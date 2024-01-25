@@ -45,20 +45,26 @@ Route::get("/notify", function () {
 
 Route::get("/userposts", function () {
     $user = Auth::user();
-    $posts = Post::with(['user'=>function ($q){
-       $q->select('id','firstname','lastname','image');
-    },'likes'])->get()->toArray();
-
-    $posts = array_map(function ($item) {
+    $posts = Post::with([
+        'user' => function ($q) {
+            $q->select('id', 'firstname', 'lastname', 'image');
+        },
+        'likes' => function ($q) { // Include the likes relationship with all columns
+            $q->select('post_id', 'id', 'user_id'); // Select all columns from the likes table
+        }
+    ])->get()->toArray();
+    $posts = array_map(function ($item) use ($user) {
         // Update the value of the `created_at` attribute with the human-readable format
         $item['created_at'] = Carbon::parse($item['created_at'])->diffForHumans();
+        // Append the user authentication ID to the front end
+        $item['user_auth_id'] = $user->id;
 
         return $item;
     }, $posts);
 
 
-   return  response()->json($posts);
- });
+    return  response()->json($posts);
+});
 
 
 Route::post('/posts', [PostController::class, 'addPost']);

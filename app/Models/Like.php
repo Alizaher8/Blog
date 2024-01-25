@@ -10,7 +10,7 @@ class Like extends Model
     use HasFactory;
     protected $fillable=['user_id','post_id'];
 
-    protected $hidden=['user_id','post_id','created_at','updated_at'];
+    protected $hidden=['post_id','created_at','updated_at'];
 
     public function user()
     {

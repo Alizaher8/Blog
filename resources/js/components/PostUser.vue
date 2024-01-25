@@ -10,35 +10,37 @@
             </div>
             <div class="fb-p1-main">
                 <div class="post-title">
-                    <img :src="'/uploads/users/' + post.user.image" alt="Image">
-
+                    <img :src="'/uploads/users/' + post.user.image" alt="Image" />
 
                     <ul>
                         <li>
-                            <h3> {{ post.user.firstname }}
+                            <h3>
+                                {{ post.user.firstname }}
                                 {{ post.user.lastname }}
                                 <span> </span>
                             </h3>
                         </li>
-                        <li><span>{{ post.created_at }}</span></li>
+                        <li>
+                            <span>{{ post.created_at }}</span>
+                        </li>
                     </ul>
                     <p>
                         {{ post.content }}
                     </p>
                 </div>
 
-                <div v-if="post.photo" class="image-container"
-                    :class="{ 'single-image': JSON.parse(post.photo).length === 1 }">
+                <div v-if="post.photo" class="image-container" :class="{
+                    'single-image': JSON.parse(post.photo).length === 1,
+                }">
                     <div v-for="(photo, index) in JSON.parse(post.photo)" :key="index" class="image-wrapper">
-                        <img :src="'/storage/photos/' + photo" alt="Image" class="post-image">
+                        <img :src="'/storage/photos/' + photo" alt="Image" class="post-image" />
                     </div>
                 </div>
 
                 <div class="like-comment">
                     <ul>
                         <li>
-                            
-                            <like-post :post_id="post.id" :likes="post.likes"></like-post>
+                            <like-post :post_id="post.id" :likes="post.likes" :user_auth_id="post.user_auth_id"></like-post>
                         </li>
                         <li>
                             <i class="fa-regular fa-comment-dots"></i>
@@ -52,12 +54,11 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
-import LikePost from '../components/LikePost.vue';
+import LikePost from "../components/LikePost.vue";
 
 export default {
     data() {
@@ -67,12 +68,10 @@ export default {
             allPosts: [],
 
             formattedDate: null,
-
         };
     },
     components: {
         LikePost,
-
     },
     watch: {
         realTimePosts: {
@@ -82,12 +81,10 @@ export default {
                     this.updateAllPosts();
                 });
             },
-            deep: true
-        }
-
+            deep: true,
+        },
     },
     methods: {
-
         updateAllPosts() {
             // Update the allPosts array when real-time posts change
             this.allPosts = [...this.databasePosts];
@@ -95,16 +92,11 @@ export default {
                 this.allPosts = [...this.allPosts, ...this.realTimePosts];
             }
         },
-
-
     },
     mounted() {
         axios.get("/api/userposts").then((response) => {
             this.databasePosts = response.data;
-            console.log(response);
-
-
-
+            console.log(response.data);
         });
 
         Echo.channel("PostsUsers").listen("PostsUser", (e) => {
@@ -113,13 +105,11 @@ export default {
         });
     },
     computed: {
-
         allPosts() {
             this.allPosts = [...this.databasePosts, ...this.realTimePosts];
             return this.allPosts;
         },
     },
-
 };
 </script>
 
@@ -203,7 +193,6 @@ export default {
     color: #4575b3;
 }
 
-
 .image-container {
     /* display: flex; */
     display: grid;
@@ -219,7 +208,6 @@ export default {
     /* Set the height to match the parent container */
     object-fit: cover;
     /* Display the entire image within the dimensions, maintaining aspect ratio */
-
 }
 
 .image-wrapper {
@@ -230,7 +218,6 @@ export default {
     overflow: hidden;
     position: relative;
 }
-
 
 .like-comment {
     width: 100%;
