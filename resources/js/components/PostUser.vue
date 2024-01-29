@@ -43,8 +43,9 @@
                             <like-post :post_id="post.id" :likes="post.likes" :user_auth_id="post.user_auth_id"></like-post>
                         </li>
                         <li>
-                            <i class="fa-regular fa-comment-dots"></i>
-                            <span>555 comments</span>
+
+                            <comment-post :post_id="post.id"></comment-post>
+
                         </li>
                         <li>
                             <i class="fa-solid fa-share-from-square"></i>

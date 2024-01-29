@@ -22,3 +22,6 @@ Broadcast::channel('UserRegisters', function () {
 Broadcast::channel('PostsUsers', function () {
     return true;
 });
+Broadcast::channel('CommentPost', function () {
+    return true;
+});

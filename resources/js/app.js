@@ -21,12 +21,14 @@ components:{
     ExampleComponent,
     PostUser,
     CreatePost,
-  
+    CommentPost
+
 }
 });
 import PostUser from './components/PostUser.vue';
 import CreatePost from './components/CreatePost.vue';
 import ExampleComponent from './components/ExampleComponent.vue';
+import CommentPost from './components/CommentPost.vue';
 app.component('example-component', ExampleComponent);
 app.component('post-user',PostUser);
 app.component('create-post',CreatePost);

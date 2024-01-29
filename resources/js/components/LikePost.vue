@@ -4,6 +4,8 @@
         <!-- <img src="images/like.png" alt="like" /> -->
         <i class="bi bi-hand-thumbs-up-fill" v-if="like == 1"></i>
         <i class="bi bi-hand-thumbs-up" v-if="like == ''"></i>
+        <i class="bi bi-{{ this.likes.length }}"></i>
+
     </a>
     <span>{{ like }} like</span>
 </template>
@@ -33,6 +35,7 @@ export default {
             if (this.likes && this.likes.length > 0 && (this.likes[index].user_id === this.user_auth_id)) {
                 console.log(this.user_auth_id);
                 console.log(this.likes[index].user_id);
+
 
                 this.like = 1;
             } else {

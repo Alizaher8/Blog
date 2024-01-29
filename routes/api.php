@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Models\PushSubscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,7 @@ Route::get("/userposts", function () {
 
 Route::post('/posts', [PostController::class, 'addPost']);
 Route::post('/likes', [LikeController::class, 'checkLike']);
+Route::post('/comments', [CommentController::class, 'addComment']);
 //get user image to use in any component
 Route::get('/user-image', function () {
     $user = Auth::user();
